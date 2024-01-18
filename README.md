@@ -61,10 +61,6 @@ Usage:
 Skip the currently playing song. If no songs are left in the
 queue, vibe-bot will leave the voice channel.
 
-Usage:
-
-
-/skip
 
 <a name="stop"></a>
 ```/stop``` 
@@ -72,27 +68,18 @@ Usage:
 Stop the player, clear the queue, and disconnect vibe-bot from the
 voice channel.
 
-Usage:
-
-/stop
 
 <a name="queue"></a>
 ```/queue```
 
 Display the songs currently in the queue.
 
-Usage:
-
-/queue
 
 <a name="help"></a>
 ```/help``` 
 
 Reveal all available slash commands for vibe-bot.
 
-Usage:
-
-/help
 
 <a name="feedback-and-support"></a>
 ##Feedback and Support 
