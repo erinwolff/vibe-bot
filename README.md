@@ -28,10 +28,13 @@ Ensure you have the following dependencies installed:
 <a name="getting-started"></a>
 ## Getting Started
 Clone the repository. Install dependencies using npm
-install. Create a config.json file with your Discord bot token.
+install. Create a config.json file with your Discord bot token, the Discord server's ID, your bot's ID, and the bot chat channel ID.
 ```
 { 
-"token": "YOUR_BOT_TOKEN" 
+"token": "YOUR_BOT_TOKEN",
+"guild_id":"DISCORD_SERVER_ID",
+"client_id":"BOT_ID",
+"bot_chat_channel_id":"BOT_CHAT_CHANNEL_ID" 
 }
 ```
 Run the bot with node yourBotFileName.js.
