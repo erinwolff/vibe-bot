@@ -2,7 +2,6 @@ const { Player } = require('discord-player');
 const { ActivityType } = require('discord.js');
 const config = require('./config.json');
 const Discord = require('discord.js');
-const ytdl = require('ytdl-core');
 
 async function vibeBot() {
   const client = new Discord.Client({
