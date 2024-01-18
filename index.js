@@ -91,14 +91,12 @@ async function vibeBot() {
       // Get the channel where the member is located
       const channel = member.voice.channel;
 
-      let urlOrQuery;
-
-      // Checks whether the query is a URL or a string to be searched on YouTube
-      if (query.startsWith('http://') || query.startsWith('https://')) {
-        urlOrQuery = query;
-      } else {
-        urlOrQuery = `ytsearch:${query}`;
-      }
+      // // Checks whether the query is a URL or a string to be searched on YouTube
+      // if (query.startsWith('http://') || query.startsWith('https://')) {
+      //   query;
+      // } else {
+      //   `ytsearch:${query}`;
+      // }
 
       // Check if the member is in a voice channel
       if (!member || !member.voice.channel) {
@@ -111,7 +109,7 @@ async function vibeBot() {
       }
 
       // Now, proceed with playing the song
-      const { track } = await player.play(channel, urlOrQuery, {
+      const { track } = await player.play(channel, query, {
         nodeOptions: {
           metadata: interaction,
         }
@@ -178,7 +176,7 @@ async function vibeBot() {
     const queue = player.nodes.get(guildId);
 
     // Check if there's a queue
-    if (!queue) {
+    if (!queue || (queue.tracks.data.length === 0 && queue.__current === null)) {
       return interaction.reply('No songs in the queue!');
     }
 
