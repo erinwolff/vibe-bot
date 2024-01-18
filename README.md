@@ -1,6 +1,4 @@
-# vibe-bot README
-
-## Introduction Welcome to vibe-bot, your go-to Discord Music Bot for
+# Welcome to vibe-bot, your go-to Discord Music Bot for
 playing tunes and enhancing your server\'s vibe. This README provides a
 comprehensive guide on setting up and using vibe-bot.
 
