@@ -13,7 +13,8 @@ comprehensive guide on setting up and using vibe-bot.
   - [/help](#help)
 - [Feedback and Support](#feedback-and-support)
 
-## Dependencies
+<a name="dependencies"></a>
+## Dependencies 
 Ensure you have the following dependencies installed:
 ```
 {
@@ -30,7 +31,7 @@ Ensure you have the following dependencies installed:
   }
 }
 ``` 
-
+<a name="getting-started"></a>
 ## Getting Started
 Clone the repository. Install dependencies using npm
 install. Create a config.json file with your Discord bot token.
@@ -41,8 +42,10 @@ install. Create a config.json file with your Discord bot token.
 ```
 Run the bot with node yourBotFileName.js.
 
-##Commands
+<a name="commands"></a>
+## Commands
 
+<a name="play"></a>
 ```/play```
 
 Play a song from YouTube via URL or Text Query. If there\'s a
@@ -52,6 +55,7 @@ Usage:
 
 /play <query or URL\>
 
+<a name="skip"></a>
 ```/skip```
 
 Skip the currently playing song. If no songs are left in the
@@ -59,8 +63,10 @@ queue, vibe-bot will leave the voice channel.
 
 Usage:
 
+
 /skip
 
+<a name="stop"></a>
 ```/stop``` 
 
 Stop the player, clear the queue, and disconnect vibe-bot from the
@@ -70,6 +76,7 @@ Usage:
 
 /stop
 
+<a name="queue"></a>
 ```/queue```
 
 Display the songs currently in the queue.
@@ -78,6 +85,7 @@ Usage:
 
 /queue
 
+<a name="help"></a>
 ```/help``` 
 
 Reveal all available slash commands for vibe-bot.
@@ -86,6 +94,7 @@ Usage:
 
 /help
 
+<a name="feedback-and-support"></a>
 ##Feedback and Support 
 
 If you need more help, encounter a bug, or have
