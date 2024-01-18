@@ -13,14 +13,13 @@ comprehensive guide on setting up and using vibe-bot.
 Ensure you have the following dependencies installed:
 ```
 {
-  "dependencies": {
+  "dependencies": {  
     "@discord-player/extractor": "^4.4.6",
     "@discordjs/opus": "^0.9.0",
+    "@discordjs/voice": "^0.16.1",
     "discord-player": "^6.6.7",
     "discord.js": "^14.14.1",
     "ffmpeg-static": "^5.2.0",
-    "youtube-ext": "^1.1.16",
-    "youtube-sr": "^4.3.10",
     "ytdl-core": "^4.11.5",
     "ytdl-core-discord": "^1.3.1"
   }
