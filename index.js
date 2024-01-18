@@ -118,18 +118,7 @@ async function vibeBot() {
         }
       });
 
-      // Creating a buffer using ytdl for quality control
-      const buffer = ytdl(urlOrQuery, {
-        quality: 'highestaudio',
-        filter: (format) => {
-          if (format.bitrate && channel?.bitrate) {
-            return format.bitrate <= channel.bitrate;
-          }
-          return false;
-        },
-      });
-
-      // // Update the initial reply with the track title
+      // Update the initial reply with the track title
       return interaction.editReply(`**${track.title}** added to the queue જ⁀➴ `);
     } catch (e) {
       console.error('Error:', e);
