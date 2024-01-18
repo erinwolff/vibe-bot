@@ -1,16 +1,16 @@
-\# vibe-bot README
+# vibe-bot README
 
-\## Introduction Welcome to vibe-bot, your go-to Discord Music Bot for
+## Introduction Welcome to vibe-bot, your go-to Discord Music Bot for
 playing tunes and enhancing your server\'s vibe. This README provides a
 comprehensive guide on setting up and using vibe-bot.
 
-\## Table of Contents - \[Dependencies\](#dependencies) - \[Getting
+## Table of Contents - \[Dependencies\](#dependencies) - \[Getting
 Started\](#getting-started) - \[Commands\](#commands)  -
 \[/play\](#play)  - \[/skip\](#skip)  - \[/stop\](#stop)  -
 \[/queue\](#queue)  - \[/help\](#help) - \[Feedback and
 Support\](#feedback-and-support)
 
-\## Dependencies Ensure you have the following dependencies installed:
+## Dependencies Ensure you have the following dependencies installed:
 \`\`\`json { \"dependencies\": { \"@discord-player/extractor\":
 \"\^4.4.6\", \"@discordjs/opus\": \"\^0.9.0\", \"discord-player\":
 \"\^6.6.7\", \"discord.js\": \"\^14.14.1\", \"ffmpeg-static\":
