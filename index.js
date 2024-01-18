@@ -119,10 +119,12 @@ async function vibeBot() {
       });
 
       // Creating a buffer using ytdl for quality control
-      const buffer = ytdl(url, {
+      const buffer = ytdl(urlOrQuery, {
         quality: 'highestaudio',
-        filter: (form) => {
-          if (form.bitrate && guildMember.voice.channel?.bitrate) return form.bitrate <= guildMember.voice.channel.bitrate;
+        filter: (format) => {
+          if (format.bitrate && channel?.bitrate) {
+            return format.bitrate <= channel.bitrate;
+          }
           return false;
         },
       });
