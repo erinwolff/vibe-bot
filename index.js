@@ -2,6 +2,7 @@ const { Player } = require('discord-player');
 const { ActivityType } = require('discord.js');
 const config = require('./config.json');
 const Discord = require('discord.js');
+const ytdl = require('ytdl-core');
 
 async function vibeBot() {
   const client = new Discord.Client({
@@ -77,7 +78,7 @@ async function vibeBot() {
 
   // Function to handle the PLAY command
   async function execute(interaction) {
-    
+
     // Retrieve the query from options
     const query = interaction.options.get('query')?.value;
 
@@ -115,6 +116,15 @@ async function vibeBot() {
         nodeOptions: {
           metadata: interaction,
         }
+      });
+
+      // Creating a buffer using ytdl for quality control
+      const buffer = ytdl(url, {
+        quality: 'highestaudio',
+        filter: (form) => {
+          if (form.bitrate && guildMember.voice.channel?.bitrate) return form.bitrate <= guildMember.voice.channel.bitrate;
+          return false;
+        },
       });
 
       // // Update the initial reply with the track title
@@ -170,7 +180,7 @@ async function vibeBot() {
 
   // Function to reveal the current QUEUE
   async function handleQueueCommand(interaction) {
-    
+
     // Get the guild id from the interaction
     const guildId = interaction.guild.id;
 
@@ -204,12 +214,11 @@ async function vibeBot() {
   `);
   }
 
-
   // Error handling 
   process.on('uncaughtException', (err) => {
     console.error('An uncaught exception occurred:', err);
     process.exit(1); // Exit the process with a failure code
-   });
+  });
 
   client.login(config.token)
 }
