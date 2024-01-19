@@ -69,6 +69,10 @@ voice channel.
 Display the songs currently in the queue.
 
 
+```/shuffle```
+Shuffles the songs currently in the queue.
+
+
 ```/help``` 
 
 Reveal all available slash commands for vibe-bot.
@@ -77,7 +81,7 @@ Reveal all available slash commands for vibe-bot.
 <a name="feedback-and-support"></a>
 ## Feedback and Support 
 
-If you need more help, encounter a bug, or have
+If you need help, encounter a bug, or have
 suggestions for additional features, please reach out!
 
 Happy vibing with vibe-bot! 🎶✨

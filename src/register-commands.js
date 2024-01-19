@@ -1,5 +1,5 @@
 const { REST, Routes } = require('discord.js');
-const config = require("./config.json");
+const config = require("../config.json");
 
 // Define your slash commands
 const commands = [
@@ -31,6 +31,10 @@ const commands = [
   {
     name: "help",
     description: "Display the commands available for vibe-bot."
+  },
+  {
+    name: "shuffle",
+    description: "Shuffles the songs currently in the queue."
   }
   // Add other commands as needed
 ];

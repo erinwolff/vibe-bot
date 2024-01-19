@@ -9,6 +9,7 @@ const skipCommand = require('./src/skip.js');
 const stopCommand = require('./src/stop.js');
 const queueCommand = require('./src/queue.js');
 const helpCommand = require('./src/help.js');
+const shuffleCommand = require('./src/shuffle.js');
 
 async function vibeBot() {
   const client = new Discord.Client({
@@ -64,7 +65,7 @@ async function vibeBot() {
   });
 
   // Function to handle slash commands incoming from Discord (interaction)
-  slashCommands(client, playCommand(player), skipCommand(player), stopCommand(player), queueCommand(player), helpCommand());
+  slashCommands(client, playCommand(player), skipCommand(player), stopCommand(player), queueCommand(player), helpCommand(), shuffleCommand(player));
 
   // Function to handle the PLAY command
   playCommand(player);
@@ -80,6 +81,24 @@ async function vibeBot() {
 
   // Function to reveal HELP options
   helpCommand();
+
+  // Function to handle the SHUFFLE command
+  client.on('interactionCreate', async interaction => {
+    if (!interaction.isCommand()) return;
+
+    const { commandName } = interaction;
+
+    if (commandName === 'shuffle') {
+      await interaction.deferReply();
+      const loadingMessage = await interaction.followUp('Shuffling the queue...');
+
+      // Call the shuffle function here
+      shuffleCommand(player)(interaction);
+
+      // Edit the loading message once the shuffle operation is complete
+      loadingMessage.edit('Queue shuffled successfully!');
+    }
+  });
 
   // Error handling 
   errorHandlers();

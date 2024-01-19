@@ -40,7 +40,6 @@ module.exports = function playCommand(player) {
       // Return an error if something failed
       return interaction.editReply(`Something went wrong: ${e}`);
     }
-    
   }
   return execute;
 }
