@@ -9,6 +9,7 @@ module.exports = function helpCommand() {
   /skip: Skip the song currently playing. If no songs are left in the queue, vibe-bot will leave the voice channel.
   /stop: Stops the player, clears the queue, and disconnects vibe-bot from the voice channel.
   /queue: Displays the songs currently in the queue.
+  /shuffle: Shuffles the songs currently in the queue.
   /help: Reveals all slash commands available for vibe-bot.\`\`\`
 `);
   }
