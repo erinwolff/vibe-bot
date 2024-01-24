@@ -70,6 +70,7 @@ Display the songs currently in the queue.
 
 
 ```/shuffle```
+
 Shuffles the songs currently in the queue.
 
 
