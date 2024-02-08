@@ -30,7 +30,13 @@ module.exports = function playCommand(player) {
       const { track } = await player.play(channel, query, {
         nodeOptions: {
           metadata: interaction,
-        }
+          leaveOnEnd: true,
+          leaveOnEndCooldown: 60000,
+          leaveOnEmpty: true,
+          leaveOnStop: true,
+          leaveOnStopCooldown: 60000,
+          volume: 2,
+        },
       });
 
       // Update the initial reply with the track title
