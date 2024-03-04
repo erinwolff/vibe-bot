@@ -35,7 +35,7 @@ module.exports = function playCommand(player) {
           leaveOnEmpty: true,
           leaveOnStop: true,
           leaveOnStopCooldown: 60000,
-          volume: 2,
+          volume: 6,
         },
       });
 
