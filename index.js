@@ -44,7 +44,7 @@ async function vibeBot() {
   });
 
   player.events.on('playerStart', (queue, track) => {
-    queue.metadata.channel.send(`Now playing **${track.title}** ♫⋆｡♪ ₊˚♬ ﾟ.`);
+    queue.metadata.channel.send(`Now playing **${track.title}** ♫⋆｡♪ ₊˚♬ ﾟ. \n${track.url}`);
   });
 
   player.events.on('audioTrackAdd', async (queue) => {
