@@ -1,6 +1,5 @@
 const { Player } = require('discord-player');
 const { ActivityType } = require('discord.js');
-const config = require('./config.json');
 const Discord = require('discord.js');
 const errorHandlers = require('./src/error.js');
 const slashCommands = require('./src/slashCommands.js');
@@ -103,6 +102,8 @@ async function vibeBot() {
   // Error handling 
   errorHandlers();
 
-  client.login(config.token)
+  const botToken = process.env.token;
+    
+  client.login(botToken)
 }
 vibeBot();
