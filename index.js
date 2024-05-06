@@ -9,6 +9,7 @@ const stopCommand = require('./src/stop.js');
 const queueCommand = require('./src/queue.js');
 const helpCommand = require('./src/help.js');
 const shuffleCommand = require('./src/shuffle.js');
+const config = require('./config.json');
 
 async function vibeBot() {
   const client = new Discord.Client({
@@ -102,7 +103,7 @@ async function vibeBot() {
   // Error handling 
   errorHandlers();
 
-  const botToken = process.env.token;
+  const botToken = config.token;
     
   client.login(botToken)
 }
