@@ -2,6 +2,8 @@
 For playing tunes and enhancing your server's vibe. This README provides a
 comprehensive guide on setting up and using vibe-bot.
 
+![vibe-bot](https://github.com/erinwolff/vibe-bot/assets/57080166/893675da-48df-485f-9b38-355779f6e565)
+
 ## Table of Contents
 - [Dependencies](#dependencies)
 - [Getting Started](#getting-started)
