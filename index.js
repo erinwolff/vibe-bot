@@ -23,11 +23,11 @@ async function vibeBot() {
   });
 
   const player = new Player(client);
-  const youtubeToken = config.youtube_oauthToken;
+  // const youtubeToken = config.youtube_oauthToken;
 
   // Load all default extractors
   player.extractors.register(YoutubeiExtractor, {
-    authentication: youtubeToken,
+    // authentication: youtubeToken,
   });
 
   // success message once client is logged in
