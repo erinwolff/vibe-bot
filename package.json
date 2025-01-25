@@ -7,5 +7,8 @@
     "discord-player-youtubei": "^1.1.8",
     "discord.js": "^14.14.1",
     "ffmpeg-static": "^5.2.0"
-  }
+  },
+  "engines": {
+  "node": "18.17.1"
+}
 }
