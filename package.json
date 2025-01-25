@@ -9,6 +9,6 @@
     "ffmpeg-static": "^5.2.0"
   },
   "engines": {
-  "node": "18.17.1"
+    "node": "18.17.1"
 }
 }
