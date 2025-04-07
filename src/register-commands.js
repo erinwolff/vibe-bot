@@ -35,7 +35,12 @@ const commands = [
   {
     name: "shuffle",
     description: "Shuffles the songs currently in the queue."
+  },
+  {
+    name:  "kexp",
+    description: "Start the live KEXP radio stream."
   }
+
   // Add other commands as needed
 ];
 

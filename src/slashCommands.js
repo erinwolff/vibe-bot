@@ -1,9 +1,8 @@
 // Function to handle slash commands incoming from Discord (interaction)
 
-module.exports = function slashCommands(client, execute, handleSkipCommand, handleStopCommand, handleQueueCommand, handleHelpCommand) {
+module.exports = function slashCommands(client, execute, handleSkipCommand, handleStopCommand, handleQueueCommand, handleHelpCommand, handleShuffleCommand, handleKEXPCommand) {
   client.on('interactionCreate', async (interaction) => {
     if (!interaction.isCommand()) return;
-
     const { commandName } = interaction;
 
     if (commandName === 'play') {
@@ -16,6 +15,10 @@ module.exports = function slashCommands(client, execute, handleSkipCommand, hand
       handleQueueCommand(interaction);
     } else if (commandName === 'help') {
       handleHelpCommand(interaction);
-    }
+    } else if (commandName === 'shuffle') {
+      handleShuffleCommand(interaction);
+    } else if (commandName === 'kexp'){
+      handleKEXPCommand(interaction);
+    } 
   });
 }

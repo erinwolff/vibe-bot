@@ -16,7 +16,7 @@ module.exports = function playCommand(player) {
       const channel = member.voice.channel;
 
       // Check if the member is in a voice channel
-      if (!member || !member.voice.channel) {
+      if (!member || !channel) {
         return interaction.editReply(
           "You are not connected to a voice channel!"
         );
