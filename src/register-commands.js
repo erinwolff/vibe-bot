@@ -71,7 +71,7 @@ const commands = [
             value: "cyber",
           },
           {
-            name: "Secret Agent 🕵🏻‍♂️",
+            name: "Secret Agent 🕵️",
             value: "secretagent",
           },
         ],
