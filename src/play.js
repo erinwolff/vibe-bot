@@ -1,3 +1,5 @@
+const { getVoiceConnection } = require("@discordjs/voice");
+
 // Function to handle the PLAY command
 
 module.exports = function playCommand(player) {
@@ -25,6 +27,16 @@ module.exports = function playCommand(player) {
       // Check if the query is present before calling player.play
       if (!query) {
         return interaction.editReply("Please provide a valid query!");
+      }
+
+      // if KEXP is already playing, stop it
+      const voiceConnection = getVoiceConnection(channel.guild.id);
+      if (voiceConnection) {
+        // Destroy the existing voice connection
+        voiceConnection.destroy();
+
+        // Wait briefly to ensure the connection is fully released
+        await new Promise((resolve) => setTimeout(resolve, 3500));
       }
 
       // Now, proceed with playing the song
