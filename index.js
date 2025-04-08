@@ -11,6 +11,7 @@ const queueCommand = require("./src/queue.js");
 const helpCommand = require("./src/help.js");
 const shuffleCommand = require("./src/shuffle.js");
 const radioCommand = require("./src/radio.js");
+const registerCommands = require("./src/register-commands.js");
 const config = require("./config.json");
 
 async function vibeBot() {
@@ -32,9 +33,12 @@ async function vibeBot() {
   });
 
   // success message once client is logged in
-  client.on("ready", (c) => {
+  client.on("ready", async (c) => {
     console.log(`Logged in as ${client.user.tag}!`);
     console.log("vibe-bot is online and ready to rock!");
+
+    // Register global commands
+    await registerCommands();
 
     // Set custom message and presence status
     try {

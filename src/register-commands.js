@@ -85,17 +85,23 @@ const commands = [
 // Set up REST for deploying commands
 const rest = new REST({ version: "10" }).setToken(config.token);
 
-(async () => {
+module.exports = async function registerCommands() {
   try {
     console.log("Started refreshing application (/) commands.");
 
-    await rest.put(
-      Routes.applicationGuildCommands(config.client_id, config.guild_id),
-      { body: commands }
-    );
+    // Register global commands
+    console.log("Registering global commands...");
+    await rest.put(Routes.applicationCommands(config.client_id), {
+      body: commands,
+    });
+    console.log("Successfully registered global application commands!");
 
-    console.log("Successfully reloaded application (/) commands.");
+    // const registeredCommands = await rest.get(
+    //   Routes.applicationCommands(config.client_id)
+    // );
+    // console.log("Currently registered global commands:", registeredCommands);
   } catch (error) {
-    console.error(error);
+    console.error("Error refreshing commands:", error);
   }
-})();
+  return registerCommands;
+};
