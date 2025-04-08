@@ -74,51 +74,92 @@ module.exports = function radioCommand() {
 
       connection.on("stateChange", (oldState, newState) => {
         if (newState.status === "destroyed") {
+          console.warn("Voice connection destroyed. Stopping player.");
           player.stop();
           ffmpeg.kill();
         }
       });
 
-      // Spawn FFmpeg with improved options
-      const ffmpeg = spawn("ffmpeg", [
-        "-reconnect",
-        "1",
-        "-reconnect_streamed",
-        "1",
-        "-reconnect_delay_max",
-        "5",
-        "-fflags",
-        "+nobuffer",
-        "-i",
-        streamUrl,
-        "-vn",
-        "-f",
-        "s16le",
-        "-ar",
-        "48000",
-        "-ac",
-        "2",
-        "pipe:1",
-      ]);
+      let ffmpeg;
 
-      // Create an audio resource from FFmpeg's output
-      const resource = createAudioResource(ffmpeg.stdout, {
-        inputType: StreamType.Raw,
-        inlineVolume: true,
-      });
+      function startStream() {
+        // Spawn FFmpeg with improved options
+        ffmpeg = spawn("ffmpeg", [
+          "-reconnect",
+          "1",
+          "-reconnect_streamed",
+          "1",
+          "-reconnect_delay_max",
+          "5",
+          "-fflags",
+          "+nobuffer",
+          "-i",
+          streamUrl,
+          "-vn",
+          "-af",
+          "volume=0.2", // Adjust FFmpeg output volume
+          "-f",
+          "s16le",
+          "-ar",
+          "48000",
+          "-ac",
+          "2",
+          "pipe:1",
+        ]);
 
-      // Set volume to 60%
-      if (resource.volume) {
-        resource.volume.setVolume(0.6);
+        const resource = createAudioResource(ffmpeg.stdout, {
+          inputType: StreamType.Raw,
+          inlineVolume: true,
+        });
+
+        if (resource.volume) {
+          resource.volume.setVolume(0.2); // 20% volume
+        }
+
+        player.play(resource);
+        connection.subscribe(player);
+
+        ffmpeg.on("error", (error) => {
+          console.error("FFmpeg process error:", error);
+          restartStream();
+        });
+
+        ffmpeg.on("close", (code, signal) => {
+          console.warn(
+            `FFmpeg process exited with code ${code} and signal ${signal}`
+          );
+          if (code !== null && signal !== "SIGTERM") {
+            console.warn("FFmpeg exited unexpectedly. Restarting stream...");
+            restartStream();
+          } else {
+            console.log("FFmpeg exited normally.");
+          }
+        });
       }
 
-      // Start playback
-      player.play(resource);
-      connection.subscribe(player);
+      function restartStream() {
+        console.warn("Restarting stream...");
+        if (ffmpeg) ffmpeg.kill();
+        player.stop();
+        startStream();
+      }
+
+      player.on("stateChange", (oldState, newState) => {
+        console.log(
+          `Player state changed from ${oldState.status} to ${newState.status}`
+        );
+        if (newState.status === "idle") {
+          console.warn("Player is idle. Restarting stream...");
+          restartStream();
+        }
+      });
 
       player.on("error", (error) => {
         console.error(`Audio player error: ${error.message}`);
+        restartStream();
       });
+
+      startStream();
 
       return interaction.editReply(
         `**Now streaming ${stationName} Radio!** Enjoy the tunes ⋆♫˚.⋆⭒.˚⋆`
