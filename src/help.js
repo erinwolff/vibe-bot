@@ -10,8 +10,9 @@ module.exports = function helpCommand() {
   /stop: Stops the player, clears the queue, and disconnects vibe-bot from the voice channel.
   /queue: Displays the songs currently in the queue.
   /shuffle: Shuffles the songs currently in the queue.
-  /help: Reveals all slash commands available for vibe-bot.\`\`\`
+  /help: Reveals all slash commands available for vibe-bot.
+  /radio: Choose from an assortment of available live radio stations!\`\`\`
 `);
   }
   return handleHelpCommand;
-}
+};
