@@ -81,6 +81,10 @@ Display the songs currently in the queue.
 
 Shuffles the songs currently in the queue.
 
+`/radio`
+
+Choose from an assortment of live radio stations.
+
 `/help`
 
 Reveal all available slash commands for vibe-bot.
