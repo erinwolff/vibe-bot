@@ -26,10 +26,10 @@ module.exports = function stopCommand(player) {
         // Send a message to the interaction channel
         await interaction.editReply("Party's over! See ya ~");
       } else if (voiceConnection) {
-        // No queue but we have a voice connection (likely KEXP)
+        // No queue but we have a voice connection (likely radio)
         voiceConnection.destroy();
         await interaction.editReply(
-          "KEXP radio stream stopped. Party's over! See ya ~"
+          "Radio stream stopped. Party's over! See ya ~"
         );
       } else {
         // Send an error message to the interaction channel

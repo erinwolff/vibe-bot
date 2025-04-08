@@ -10,7 +10,7 @@ const stopCommand = require("./src/stop.js");
 const queueCommand = require("./src/queue.js");
 const helpCommand = require("./src/help.js");
 const shuffleCommand = require("./src/shuffle.js");
-const kexpCommand = require("./src/kexp.js");
+const radioCommand = require("./src/radio.js");
 const config = require("./config.json");
 
 async function vibeBot() {
@@ -80,7 +80,7 @@ async function vibeBot() {
     queueCommand(player),
     helpCommand(),
     shuffleCommand(player),
-    kexpCommand(player)
+    radioCommand(player)
   );
 
   // Function to handle the PLAY command
@@ -98,8 +98,8 @@ async function vibeBot() {
   // Function to reveal HELP options
   helpCommand();
 
-  // Function to handle the KEXP command
-  kexpCommand(player);
+  // Function to handle the RADIO command
+  radioCommand(player);
 
   // Function to handle the SHUFFLE command
   client.on("interactionCreate", async (interaction) => {

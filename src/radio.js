@@ -7,8 +7,28 @@ const {
 } = require("@discordjs/voice");
 const { spawn } = require("child_process");
 
-module.exports = function kexpCommand() {
-  async function handleKEXPCommand(interaction) {
+const radioStations = {
+  kexp: "https://kexp-mp3-128.streamguys1.com/kexp128.mp3",
+  groovesalad: "https://ice5.somafm.com/groovesalad-128-mp3",
+  lounge: "https://ice5.somafm.com/illstreet-128-mp3",
+  deephouse: "https://ice5.somafm.com/beatblender-128-mp3",
+  trance: "https://ice5.somafm.com/thetrip-128-mp3",
+  cyber: "https://ice5.somafm.com/defcon-128-mp3",
+  secretagent: "https://ice5.somafm.com/secretagent-128-mp3",
+};
+
+const radioChoices = [
+  { name: "KEXP", value: "kexp" },
+  { name: "Groove Salad", value: "groovesalad" },
+  { name: "Lounge", value: "lounge" },
+  { name: "Deep House", value: "deephouse" },
+  { name: "Trance", value: "trance" },
+  { name: "Cyber", value: "cyber" },
+  { name: "Secret Agent", value: "secretagent" },
+];
+
+module.exports = function radioCommand() {
+  async function handleRadioCommand(interaction) {
     await interaction.deferReply();
     try {
       const member = interaction.member;
@@ -16,6 +36,27 @@ module.exports = function kexpCommand() {
       if (!member || !channel) {
         return interaction.editReply(
           "You are not connected to a voice channel!"
+        );
+      }
+
+      // Retrieve the user-selected radio station
+      const stationKey = interaction.options
+        .getString("station")
+        ?.toLowerCase();
+
+      // Match the station key with the radioChoices
+      const stationChoice = radioChoices.find(
+        (choice) => choice.value === stationKey
+      );
+
+      // Get the station name from the choice
+      const stationName = stationChoice ? stationChoice.name : null;
+
+      const streamUrl = radioStations[stationKey];
+
+      if (!streamUrl) {
+        return interaction.editReply(
+          "Invalid radio station selected. Please choose a valid option."
         );
       }
 
@@ -37,8 +78,6 @@ module.exports = function kexpCommand() {
           ffmpeg.kill();
         }
       });
-
-      const streamUrl = "https://kexp-mp3-128.streamguys1.com/kexp128.mp3";
 
       // Spawn FFmpeg with improved options
       const ffmpeg = spawn("ffmpeg", [
@@ -82,16 +121,15 @@ module.exports = function kexpCommand() {
       });
 
       return interaction.editReply(
-        "**Now streaming KEXP Radio live!** Enjoy the tunes ⋆♫˚.⋆⭒.˚⋆"
+        `**Now streaming ${stationName} Radio!** Enjoy the tunes ⋆♫˚.⋆⭒.˚⋆`
       );
     } catch (error) {
-      console.error("Error in KEXP command:", error);
+      console.error("Error in radio command:", error);
 
       // Return a shorter error message
       return interaction
         .editReply({
-          content:
-            "Failed to play KEXP radio. Please check the console for more details.",
+          content: "Failed to play the selected radio station.",
           ephemeral: true,
         })
         .catch((err) => {
@@ -99,5 +137,5 @@ module.exports = function kexpCommand() {
         });
     }
   }
-  return handleKEXPCommand;
+  return handleRadioCommand;
 };

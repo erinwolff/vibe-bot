@@ -8,7 +8,7 @@ module.exports = function slashCommands(
   handleQueueCommand,
   handleHelpCommand,
   handleShuffleCommand,
-  handleKEXPCommand
+  handleRadioCommand
 ) {
   client.on("interactionCreate", async (interaction) => {
     if (!interaction.isCommand()) return;
@@ -26,8 +26,8 @@ module.exports = function slashCommands(
       handleHelpCommand(interaction);
     } else if (commandName === "shuffle") {
       handleShuffleCommand(interaction);
-    } else if (commandName === "kexp") {
-      handleKEXPCommand(interaction);
+    } else if (commandName === "radio") {
+      handleRadioCommand(interaction);
     }
   });
 };

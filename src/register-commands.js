@@ -37,8 +37,46 @@ const commands = [
     description: "Shuffles the songs currently in the queue.",
   },
   {
-    name: "kexp",
-    description: "Start the live KEXP radio stream.",
+    name: "radio",
+    description: "Choose from a list of radio stations to play.",
+    options: [
+      {
+        name: "station",
+        type: 3, // STRING
+        description: "The radio station you want to play",
+        required: true,
+        choices: [
+          {
+            name: "KEXP 🎧",
+            value: "kexp",
+          },
+          {
+            name: "Groove Salad 🥗",
+            value: "groovesalad",
+          },
+          {
+            name: "Lounge 🛋️",
+            value: "lounge",
+          },
+          {
+            name: "Deep House 🏠",
+            value: "deephouse",
+          },
+          {
+            name: "Trance 🌀",
+            value: "trance",
+          },
+          {
+            name: "Cyber 🦾",
+            value: "cyber",
+          },
+          {
+            name: "Secret Agent 🕵🏻‍♂️",
+            value: "secretagent",
+          },
+        ],
+      },
+    ],
   },
 
   // Add other commands as needed

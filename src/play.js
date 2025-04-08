@@ -29,7 +29,7 @@ module.exports = function playCommand(player) {
         return interaction.editReply("Please provide a valid query!");
       }
 
-      // if KEXP is already playing, stop it
+      // if radio is already playing, stop it
       const voiceConnection = getVoiceConnection(channel.guild.id);
       if (voiceConnection) {
         // Destroy the existing voice connection
