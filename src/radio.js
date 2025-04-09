@@ -70,17 +70,30 @@ module.exports = function radioCommand() {
       // Create an audio player
       const player = createAudioPlayer({
         behaviors: { noSubscriber: NoSubscriberBehavior.Play },
+        isStopped: false,
       });
 
       connection.on("stateChange", (oldState, newState) => {
         if (newState.status === "destroyed") {
           console.warn("Voice connection destroyed. Stopping player.");
-          player.stop();
-          ffmpeg.kill();
+          destroyPlayer();
         }
       });
 
       let ffmpeg;
+
+      function destroyPlayer() {
+        console.warn("Destroying player and cleaning up resources...");
+        if (ffmpeg) {
+          ffmpeg.kill();
+          ffmpeg = null;
+        }
+        if (player) {
+          player.stop();
+          player.removeAllListeners(); // Remove all event listeners
+          player.isStopped = true;
+        }
+      }
 
       function startStream() {
         // Spawn FFmpeg with improved options
@@ -128,7 +141,7 @@ module.exports = function radioCommand() {
           console.warn(
             `FFmpeg process exited with code ${code} and signal ${signal}`
           );
-          if (code !== null && signal !== "SIGTERM") {
+          if (!player.isStopped) {
             console.warn("FFmpeg exited unexpectedly. Restarting stream...");
             restartStream();
           } else {
@@ -148,7 +161,7 @@ module.exports = function radioCommand() {
         console.log(
           `Player state changed from ${oldState.status} to ${newState.status}`
         );
-        if (newState.status === "idle") {
+        if (newState.status === "idle" && !player.isStopped) {
           console.warn("Player is idle. Restarting stream...");
           restartStream();
         }
