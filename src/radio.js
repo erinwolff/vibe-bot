@@ -4,6 +4,7 @@ const {
   createAudioResource,
   NoSubscriberBehavior,
   StreamType,
+  getVoiceConnection,
 } = require("@discordjs/voice");
 const { spawn } = require("child_process");
 
@@ -27,7 +28,7 @@ const radioChoices = [
   { name: "Secret Agent", value: "secretagent" },
 ];
 
-module.exports = function radioCommand() {
+module.exports = function radioCommand(discordPlayer) {
   async function handleRadioCommand(interaction) {
     await interaction.deferReply();
     try {
@@ -60,6 +61,20 @@ module.exports = function radioCommand() {
         );
       }
 
+      // Check if a YouTube/discord-player queue is active in this guild
+      const guildId = channel.guild.id;
+      const youtubeQueue = discordPlayer.nodes.get(guildId);
+      if (youtubeQueue) {
+        console.log(
+          "Active YouTube queue detected. Stopping it before starting Radio..."
+        );
+        // Stop the queue and remove it
+        youtubeQueue.node.stop(guildId);
+        discordPlayer.nodes.delete(guildId);
+        // Wait briefly to ensure the connection is fully released
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+
       // Connect to the voice channel
       const connection = joinVoiceChannel({
         channelId: channel.id,
@@ -67,8 +82,8 @@ module.exports = function radioCommand() {
         adapterCreator: channel.guild.voiceAdapterCreator,
       });
 
-      // Create an audio player
-      const player = createAudioPlayer({
+      // Create an audio player for the radio stream
+      const radioPlayer = createAudioPlayer({
         behaviors: { noSubscriber: NoSubscriberBehavior.Play },
         isStopped: false,
       });
@@ -88,10 +103,10 @@ module.exports = function radioCommand() {
           ffmpeg.kill();
           ffmpeg = null;
         }
-        if (player) {
-          player.stop();
-          player.removeAllListeners(); // Remove all event listeners
-          player.isStopped = true;
+        if (radioPlayer) {
+          radioPlayer.stop();
+          radioPlayer.removeAllListeners(); // Remove all event listeners
+          radioPlayer.isStopped = true;
         }
       }
 
@@ -129,8 +144,8 @@ module.exports = function radioCommand() {
           resource.volume.setVolume(0.2); // 20% volume
         }
 
-        player.play(resource);
-        connection.subscribe(player);
+        radioPlayer.play(resource);
+        connection.subscribe(radioPlayer);
 
         ffmpeg.on("error", (error) => {
           console.error("FFmpeg process error:", error);
@@ -141,7 +156,7 @@ module.exports = function radioCommand() {
           console.warn(
             `FFmpeg process exited with code ${code} and signal ${signal}`
           );
-          if (!player.isStopped) {
+          if (!radioPlayer.isStopped) {
             console.warn("FFmpeg exited unexpectedly. Restarting stream...");
             restartStream();
           } else {
@@ -153,11 +168,11 @@ module.exports = function radioCommand() {
       function restartStream() {
         console.warn("Restarting stream...");
         if (ffmpeg) ffmpeg.kill();
-        player.stop();
+        radioPlayer.stop();
         startStream();
       }
 
-      player.on("stateChange", (oldState, newState) => {
+      radioPlayer.on("stateChange", (oldState, newState) => {
         console.log(
           `Player state changed from ${oldState.status} to ${newState.status}`
         );
@@ -167,7 +182,7 @@ module.exports = function radioCommand() {
         }
       });
 
-      player.on("error", (error) => {
+      radioPlayer.on("error", (error) => {
         console.error(`Audio player error: ${error.message}`);
         restartStream();
       });

@@ -36,7 +36,7 @@ module.exports = function playCommand(player) {
         voiceConnection.destroy();
 
         // Wait briefly to ensure the connection is fully released
-        await new Promise((resolve) => setTimeout(resolve, 3500));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
 
       // Now, proceed with playing the song
