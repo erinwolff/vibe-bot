@@ -1,5 +1,6 @@
 const { REST, Routes } = require("discord.js");
 const config = require("../config.json");
+const { getRadioChoices } = require("./radio/stations");
 
 // Define your slash commands
 const commands = [
@@ -45,40 +46,7 @@ const commands = [
         type: 3, // STRING
         description: "The radio station you want to play",
         required: true,
-        choices: [
-          {
-            name: "KEXP 🎧",
-            value: "kexp",
-          },
-          {
-            name: "Groove Salad 🥗",
-            value: "groovesalad",
-          },
-          {
-            name: "Lounge 🛋️",
-            value: "lounge",
-          },
-          {
-            name: "Deep House 🏠",
-            value: "deephouse",
-          },
-          {
-            name: "Trance 🌀",
-            value: "trance",
-          },
-          {
-            name: "Cyber 🦾",
-            value: "cyber",
-          },
-          {
-            name: "Secret Agent 🕵️",
-            value: "secretagent",
-          },
-          {
-            name: "Party Time 🎉",
-            value: "partytime",
-          },
-        ],
+        choices: getRadioChoices(),
       },
     ],
   },
