@@ -1,45 +1,64 @@
-const { getVoiceConnection } = require("@discordjs/voice");
-
-// Function to handle the STOP command
+const { stopActiveConnection } = require("./radio/queueManager");
+const {
+  handleMusicError,
+  logDetailedError,
+} = require("./utils/musicErrorHandler");
 
 module.exports = function stopCommand(player) {
-  async function handleStopCommand(interaction) {
+  async function execute(interaction) {
+    await interaction.deferReply();
+
+    // Get guild ID early for error handling
+    const guildId = interaction.guild?.id;
+    if (!guildId) {
+      return interaction.editReply(
+        "This command can only be used in a server."
+      );
+    }
+
     try {
-      // Defer the interaction as things can take time to process
-      await interaction.deferReply();
+      // Check for discord-player queue first
+      const queue = player.nodes.get(interaction.guild);
+      let stoppedSomething = false;
 
-      // Get the guild id from the interaction
-      const guildId = interaction.guild.id;
+      if (queue) {
+        try {
+          // Save whether we had a queue before stopping
+          stoppedSomething = true;
 
-      // First, check if there's a voice connection regardless of queue
-      const voiceConnection = getVoiceConnection(guildId);
-
-      // Fetch the queue
-      const queue = player.nodes.get(guildId);
-
-      // Check if the player is defined and has a queue for the guild
-      if (player && queue) {
-        // Stop the queue
-        queue.node.stop(guildId);
-        // Destroy the queue node
-        player.nodes.delete(guildId);
-        // Send a message to the interaction channel
-        await interaction.editReply("Party's over! See ya ~");
-      } else if (voiceConnection) {
-        // No queue but we have a voice connection (likely radio)
-        voiceConnection.destroy();
-        await interaction.editReply(
-          "Radio stream stopped. Party's over! See ya ~"
-        );
-      } else {
-        // Send an error message to the interaction channel
-        interaction.editReply("There is nothing playing!");
+          // Stop the queue
+          queue.delete();
+        } catch (queueError) {
+          // Log but continue - we'll still try to stop any active connections
+          logDetailedError("stop-queue", queueError, { guild: guildId });
+        }
       }
-    } catch (error) {
-      console.error("Error in stopCommand:", error);
-      // Send an error message to the interaction channel
-      interaction.editReply("An error occurred while stopping the stream.");
+
+      // Also try to stop any potential radio or lingering voice connection
+      const connectionStopped = stopActiveConnection(guildId);
+      stoppedSomething = stoppedSomething || connectionStopped;
+
+      if (stoppedSomething) {
+        return interaction.editReply("Party's over! See ya ~");
+      } else {
+        return interaction.editReply("I'm not currently playing anything!");
+      }
+    } catch (e) {
+      // Handle unexpected errors
+      logDetailedError("stop", e, { guild: guildId });
+
+      try {
+        // Even if we get an error, try one last time to force disconnect
+        stopActiveConnection(guildId);
+
+        return interaction.editReply(
+          "⚠️ Encountered an issue, but attempted to stop playing and disconnect."
+        );
+      } catch (replyError) {
+        console.error("Failed to send error reply:", replyError);
+      }
     }
   }
-  return handleStopCommand;
+
+  return execute;
 };

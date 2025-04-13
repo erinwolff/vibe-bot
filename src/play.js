@@ -1,7 +1,10 @@
-const { getVoiceConnection } = require("@discordjs/voice");
+const { stopActiveConnection } = require("./radio/queueManager");
+const {
+  handleMusicError,
+  logDetailedError,
+} = require("./utils/musicErrorHandler");
 
 // Function to handle the PLAY command
-
 module.exports = function playCommand(player) {
   async function execute(interaction) {
     // Retrieve the query from options
@@ -9,6 +12,14 @@ module.exports = function playCommand(player) {
 
     // Defer the interaction as things can take time to process
     await interaction.deferReply();
+
+    // Get guild ID early for error handling
+    const guildId = interaction.guild?.id;
+    if (!guildId) {
+      return interaction.editReply(
+        "This command can only be used in a server."
+      );
+    }
 
     try {
       // Get the member who triggered the interaction
@@ -29,37 +40,64 @@ module.exports = function playCommand(player) {
         return interaction.editReply("Please provide a valid query!");
       }
 
-      // if radio is already playing, stop it
-      const voiceConnection = getVoiceConnection(channel.guild.id);
-      if (voiceConnection) {
-        // Destroy the existing voice connection
-        voiceConnection.destroy();
+      // Stop any active radio or voice connection
+      const connectionStopped = stopActiveConnection(guildId);
 
-        // Wait briefly to ensure the connection is fully released
+      // If a connection was stopped, wait briefly to ensure it's fully released
+      if (connectionStopped) {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
 
-      // Now, proceed with playing the song
-      const { track } = await player.play(channel, query, {
-        nodeOptions: {
-          metadata: interaction,
-          leaveOnEnd: true,
-          leaveOnEndCooldown: 600000,
-          leaveOnEmpty: true,
-          leaveOnStop: true,
-          leaveOnStopCooldown: 600000,
-          volume: 6,
-        },
-      });
+      try {
+        // Now, proceed with playing the song
+        const { track } = await player.play(channel, query, {
+          nodeOptions: {
+            metadata: interaction,
+            leaveOnEnd: true,
+            leaveOnEndCooldown: 600000,
+            leaveOnEmpty: true,
+            leaveOnStop: true,
+            leaveOnStopCooldown: 600000,
+            volume: 6,
+          },
+        });
 
-      // Update the initial reply with the track title
-      return interaction.editReply(
-        `**${track.title}** added to the queue જ⁀➴ `
-      );
+        // Log successful play attempt
+        console.log(`Successfully queued track: "${track.title}" [${guildId}]`);
+
+        // Update the initial reply with the track title
+        return interaction.editReply(
+          `**${track.title}** added to the queue જ⁀➴ `
+        );
+      } catch (playError) {
+        // Use our dedicated error handler for music-specific errors
+        await handleMusicError(
+          playError,
+          interaction,
+          guildId,
+          // Pass cleanup function to handle any resource cleanup
+          (id) => stopActiveConnection(id)
+        );
+
+        // Log detailed error information for debugging
+        logDetailedError("play", playError, {
+          guild: guildId,
+          channel: channel.id,
+          query: query,
+        });
+      }
     } catch (e) {
-      console.error("Error:", e);
-      // Return an error if something failed
-      return interaction.editReply(`Something went wrong: ${e}`);
+      // Handle unexpected errors that aren't directly related to playing music
+      logDetailedError("play", e, { guild: guildId, query: query });
+
+      // Try to send a meaningful error response
+      try {
+        return interaction.editReply(
+          "An unexpected error occurred while processing your request."
+        );
+      } catch (replyError) {
+        console.error("Failed to send error reply:", replyError);
+      }
     }
   }
   return execute;
