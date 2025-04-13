@@ -4,7 +4,6 @@ const {
   createAudioResource,
   NoSubscriberBehavior,
   StreamType,
-  getVoiceConnection,
 } = require("@discordjs/voice");
 const { spawn } = require("child_process");
 
@@ -12,20 +11,25 @@ const radioStations = {
   kexp: "https://kexp-mp3-128.streamguys1.com/kexp128.mp3",
   groovesalad: "https://ice5.somafm.com/groovesalad-128-mp3",
   lounge: "https://ice5.somafm.com/illstreet-128-mp3",
-  deephouse: "https://ice5.somafm.com/beatblender-128-mp3",
+  downtempo: "https://ice5.somafm.com/beatblender-128-mp3",
   trance: "https://ice5.somafm.com/thetrip-128-mp3",
   cyber: "https://ice5.somafm.com/defcon-128-mp3",
   secretagent: "https://ice5.somafm.com/secretagent-128-mp3",
+  partytime: "https://ice5.somafm.com/dubstep-128-mp3",
+  lotradio:
+    "https://lvpr.tv?v=85c28sa2o8wppm58&amp;lowLatency=false&amp;muted=false",
 };
 
 const radioChoices = [
   { name: "KEXP", value: "kexp" },
   { name: "Groove Salad", value: "groovesalad" },
   { name: "Lounge", value: "lounge" },
-  { name: "Deep House", value: "deephouse" },
+  { name: "Downtempo", value: "downtempo" },
   { name: "Trance", value: "trance" },
   { name: "Cyber", value: "cyber" },
   { name: "Secret Agent", value: "secretagent" },
+  { name: "Party Time", value: "partytime" },
+  { name: "Lot Radio", value: "lotradio" },
 ];
 
 module.exports = function radioCommand(discordPlayer) {
@@ -176,7 +180,7 @@ module.exports = function radioCommand(discordPlayer) {
         console.log(
           `Player state changed from ${oldState.status} to ${newState.status}`
         );
-        if (newState.status === "idle" && !player.isStopped) {
+        if (newState.status === "idle" && !radioPlayer.isStopped) {
           console.warn("Player is idle. Restarting stream...");
           restartStream();
         }

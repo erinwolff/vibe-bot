@@ -74,6 +74,14 @@ const commands = [
             name: "Secret Agent 🕵️",
             value: "secretagent",
           },
+          {
+            name: "Party Time 🎉",
+            value: "partytime",
+          },
+          {
+            name: "Lot Radio 📻",
+            value: "lotradio",
+          },
         ],
       },
     ],
