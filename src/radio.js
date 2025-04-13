@@ -16,8 +16,7 @@ const radioStations = {
   cyber: "https://ice5.somafm.com/defcon-128-mp3",
   secretagent: "https://ice5.somafm.com/secretagent-128-mp3",
   partytime: "https://ice5.somafm.com/dubstep-128-mp3",
-  lotradio:
-    "https://lvpr.tv?v=85c28sa2o8wppm58&amp;lowLatency=false&amp;muted=false",
+  lotradio: "https://livepeercdn.studio/hls/85c28sa2o8wppm58/index.m3u8",
 };
 
 const radioChoices = [
