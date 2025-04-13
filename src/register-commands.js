@@ -78,10 +78,6 @@ const commands = [
             name: "Party Time 🎉",
             value: "partytime",
           },
-          {
-            name: "Lot Radio 📻",
-            value: "lotradio",
-          },
         ],
       },
     ],

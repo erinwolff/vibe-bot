@@ -16,7 +16,6 @@ const radioStations = {
   cyber: "https://ice5.somafm.com/defcon-128-mp3",
   secretagent: "https://ice5.somafm.com/secretagent-128-mp3",
   partytime: "https://ice5.somafm.com/dubstep-128-mp3",
-  lotradio: "https://livepeercdn.studio/hls/85c28sa2o8wppm58/index.m3u8",
 };
 
 const radioChoices = [
@@ -28,7 +27,6 @@ const radioChoices = [
   { name: "Cyber", value: "cyber" },
   { name: "Secret Agent", value: "secretagent" },
   { name: "Party Time", value: "partytime" },
-  { name: "Lot Radio", value: "lotradio" },
 ];
 
 module.exports = function radioCommand(discordPlayer) {
