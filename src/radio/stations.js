@@ -13,6 +13,10 @@ const radioStations = {
   cyber: "https://ice5.somafm.com/defcon-128-mp3",
   secretagent: "https://ice5.somafm.com/secretagent-128-mp3",
   partytime: "https://ice5.somafm.com/dubstep-128-mp3",
+  indiepop: "https://ice5.somafm.com/indiepop-128-mp3",
+  yachtrock: "https://ice5.somafm.com/seventies-128-mp3",
+  metal: "https://ice5.somafm.com/metal-128-mp3",
+  fluid: "https://ice5.somafm.com/fluid-128-mp3",
 };
 
 // Choice options for Discord slash command
@@ -25,6 +29,10 @@ const radioChoices = [
   { name: "Cyber 🦾", value: "cyber" },
   { name: "Secret Agent 🕵️", value: "secretagent" },
   { name: "Party Time 🎉", value: "partytime" },
+  { name: "Indie Pop 🎤", value: "indiepop" },
+  { name: "Yacht Rock ⛵", value: "yachtrock" },
+  { name: "Metal 🤘", value: "metal" },
+  { name: "Fluid 🎶", value: "fluid" },
 ];
 
 /**
