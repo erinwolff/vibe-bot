@@ -1,13 +1,13 @@
 {
   "dependencies": {
-    "@discord-player/extractor": "^4.4.6",
-    "@discordjs/voice": "^0.16.1",
+    "@discord-player/extractor": "latest",
+    "@discordjs/voice": "latest",
     "bgutils-js": "^3.2.0",
-    "discord-player": "^6.6.7",
-    "discord-player-youtubei": "^1.1.8",
-    "discord.js": "^14.14.1",
-    "ffmpeg-static": "^5.2.0",
-    "opusscript": "^0.0.8"
+    "discord-player": "latest",
+    "discord-player-youtubei": "latest",
+    "discord.js": "latest",
+    "ffmpeg-static": "latest",
+    "opusscript": "latest"
   },
   "engines": {
     "node": "20.19.0"
