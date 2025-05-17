@@ -30,6 +30,10 @@ async function vibeBot() {
   // Load all default extractors
   player.extractors.register(YoutubeiExtractor, {
     // authentication: youtubeToken,
+    streamOptions: {
+      useClient: "WEB_EMBEDDED",
+    },
+    generateWithPoToken: true,
   });
 
   // success message once client is logged in
