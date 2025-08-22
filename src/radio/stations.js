@@ -21,6 +21,7 @@ const radioStations = {
 
 // Choice options for Discord slash command
 const radioChoices = [
+  { name: "Selections FM 💿", value: "selections" },
   { name: "KEXP 🎧", value: "kexp" },
   { name: "Groove Salad 🥗", value: "groovesalad" },
   { name: "Lounge 🛋️", value: "lounge" },

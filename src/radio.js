@@ -7,6 +7,8 @@ const {
   stopActiveQueue,
   stopActiveConnection,
 } = require("./radio/queueManager");
+const { sshRun } = require("./utils/remote");
+const config = require("../config.json");
 
 module.exports = function radioCommand(discordPlayer) {
   async function handleRadioCommand(interaction) {
@@ -27,18 +29,32 @@ module.exports = function radioCommand(discordPlayer) {
         .getString("station")
         ?.toLowerCase();
       const stationName = getStationName(stationKey);
-      const streamUrl = getStationUrl(stationKey);
+      let streamUrl = getStationUrl(stationKey);
+
+      // 3. Stop any active audio/queue in the guild
+      const guildId = channel.guild.id;
+      await stopActiveQueue(discordPlayer, guildId);
+      stopActiveConnection(guildId);
+
+      // 3.5 Spin up Selections FM on the PC (only for our local mount)
+      if (stationKey === "selections") {
+        const { pc_host, pc_user } = config;
+        // start user service on PC (idempotent)
+        await sshRun(
+          pc_host,
+          pc_user,
+          "systemctl --user start selections-radio.service"
+        );
+        // give ffmpeg a moment to attach to Icecast
+        await new Promise((r) => setTimeout(r, 1500));
+        streamUrl = `http://${pc_host}:8000/selections.mp3`;
+      }
 
       if (!streamUrl) {
         return interaction.editReply(
           "Invalid radio station selected. Please choose a valid option."
         );
       }
-
-      // 3. Stop any active audio/queue in the guild
-      const guildId = channel.guild.id;
-      await stopActiveQueue(discordPlayer, guildId);
-      stopActiveConnection(guildId);
 
       // 4. Create voice connection and radio player
       const connection = createVoiceConnection(channel);
@@ -48,8 +64,9 @@ module.exports = function radioCommand(discordPlayer) {
       radioStream.start();
 
       // 6. Send success message
+      const label = stationKey === "selections" ? "Selections FM" : stationName;
       return interaction.editReply(
-        `**Now streaming ${stationName} Radio!** Enjoy the tunes ⋆♫˚.⋆⭒.˚⋆`
+        `**Now streaming ${label}!** Enjoy the tunes ⋆♫˚.⋆⭒.˚⋆`
       );
     } catch (error) {
       console.error("Error in radio command:", error);

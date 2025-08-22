@@ -1,8 +1,7 @@
 const { stopActiveConnection } = require("./radio/queueManager");
-const {
-  handleMusicError,
-  logDetailedError,
-} = require("./utils/musicErrorHandler");
+const { logDetailedError } = require("./utils/musicErrorHandler");
+const { sshRun } = require("./utils/remote");
+const config = require("../config.json");
 
 module.exports = function stopCommand(player) {
   async function execute(interaction) {
@@ -37,6 +36,21 @@ module.exports = function stopCommand(player) {
       // Also try to stop any potential radio or lingering voice connection
       const connectionStopped = stopActiveConnection(guildId);
       stoppedSomething = stoppedSomething || connectionStopped;
+
+      // Always try to stop the Icecast stream on PC
+      try {
+        await sshRun(
+          config.pc_host,
+          config.pc_user,
+          "systemctl --user stop selections-radio.service"
+        );
+        console.log("Stopped selections-radio.service on PC");
+      } catch (sshError) {
+        console.warn(
+          "Could not stop selections-radio.service:",
+          sshError.message
+        );
+      }
 
       if (stoppedSomething) {
         return interaction.editReply("Party's over! See ya ~");
