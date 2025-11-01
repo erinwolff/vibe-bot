@@ -38,6 +38,7 @@ function createRadioPlayer(streamUrl, connection) {
   });
 
   let ffmpeg;
+  let isRestarting = false;
 
   // Set up connection state change listener
   connection.on("stateChange", (oldState, newState) => {
@@ -52,14 +53,17 @@ function createRadioPlayer(streamUrl, connection) {
    */
   function destroyPlayer() {
     console.warn("Destroying player and cleaning up resources...");
+    radioPlayer.isStopped = true;
+    isRestarting = false;
+
     if (ffmpeg) {
+      ffmpeg.removeAllListeners();
       ffmpeg.kill();
       ffmpeg = null;
     }
     if (radioPlayer) {
       radioPlayer.stop();
       radioPlayer.removeAllListeners();
-      radioPlayer.isStopped = true;
     }
   }
 
@@ -123,13 +127,30 @@ function createRadioPlayer(streamUrl, connection) {
   }
 
   /**
-   * Restart the audio stream
+   * Restart the audio stream with loop prevention
    */
   function restartStream() {
-    console.warn("Restarting stream...");
-    if (ffmpeg) ffmpeg.kill();
+    // Prevent multiple simultaneous restart attempts
+    if (isRestarting || radioPlayer.isStopped) {
+      return;
+    }
+
+    isRestarting = true;
+
+    if (ffmpeg) {
+      ffmpeg.removeAllListeners();
+      ffmpeg.kill();
+    }
+
     radioPlayer.stop();
-    startStream();
+
+    // Add a small delay before restarting to prevent rapid loops
+    setTimeout(() => {
+      if (!radioPlayer.isStopped) {
+        startStream();
+      }
+      isRestarting = false;
+    }, 1000);
   }
 
   // Set up player error handling
