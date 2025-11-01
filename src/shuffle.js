@@ -1,6 +1,6 @@
 // Function to handle the SHUFFLE command
 
-module.exports = function shuffleCommand(player) {
+export default function shuffleCommand(player) {
   async function handleShuffleCommand(interaction) {
     // Get the guild id from the interaction
     const guildId = interaction.guild.id;
@@ -17,4 +17,4 @@ module.exports = function shuffleCommand(player) {
     }
   }
   return handleShuffleCommand;
-};
+}

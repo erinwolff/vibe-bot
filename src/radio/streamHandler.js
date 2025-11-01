@@ -2,21 +2,21 @@
  * Radio stream handler module
  * Handles the creation and management of audio streams
  */
-const {
+import {
   joinVoiceChannel,
   createAudioPlayer,
   createAudioResource,
   NoSubscriberBehavior,
   StreamType,
-} = require("@discordjs/voice");
-const { spawn } = require("child_process");
+} from "@discordjs/voice";
+import { spawn } from "child_process";
 
 /**
  * Create a connection to a voice channel
  * @param {Object} channel - The Discord voice channel to join
  * @returns {Object} The voice connection
  */
-function createVoiceConnection(channel) {
+export function createVoiceConnection(channel) {
   return joinVoiceChannel({
     channelId: channel.id,
     guildId: channel.guild.id,
@@ -30,7 +30,7 @@ function createVoiceConnection(channel) {
  * @param {Object} connection - The Discord voice connection
  * @returns {Object} Object with player, start/stop methods, and cleanup functions
  */
-function createRadioPlayer(streamUrl, connection) {
+export function createRadioPlayer(streamUrl, connection) {
   // Create the audio player
   const radioPlayer = createAudioPlayer({
     behaviors: { noSubscriber: NoSubscriberBehavior.Play },
@@ -38,6 +38,7 @@ function createRadioPlayer(streamUrl, connection) {
   });
 
   let ffmpeg;
+  let isRestarting = false;
 
   // Set up connection state change listener
   connection.on("stateChange", (oldState, newState) => {
@@ -52,14 +53,17 @@ function createRadioPlayer(streamUrl, connection) {
    */
   function destroyPlayer() {
     console.warn("Destroying player and cleaning up resources...");
+    radioPlayer.isStopped = true;
+    isRestarting = false;
+
     if (ffmpeg) {
+      ffmpeg.removeAllListeners();
       ffmpeg.kill();
       ffmpeg = null;
     }
     if (radioPlayer) {
       radioPlayer.stop();
       radioPlayer.removeAllListeners();
-      radioPlayer.isStopped = true;
     }
   }
 
@@ -123,13 +127,30 @@ function createRadioPlayer(streamUrl, connection) {
   }
 
   /**
-   * Restart the audio stream
+   * Restart the audio stream with loop prevention
    */
   function restartStream() {
-    console.warn("Restarting stream...");
-    if (ffmpeg) ffmpeg.kill();
+    // Prevent multiple simultaneous restart attempts
+    if (isRestarting || radioPlayer.isStopped) {
+      return;
+    }
+
+    isRestarting = true;
+
+    if (ffmpeg) {
+      ffmpeg.removeAllListeners();
+      ffmpeg.kill();
+    }
+
     radioPlayer.stop();
-    startStream();
+
+    // Add a small delay before restarting to prevent rapid loops
+    setTimeout(() => {
+      if (!radioPlayer.isStopped) {
+        startStream();
+      }
+      isRestarting = false;
+    }, 1000);
   }
 
   // Set up player error handling
@@ -154,8 +175,3 @@ function createRadioPlayer(streamUrl, connection) {
     destroy: destroyPlayer,
   };
 }
-
-module.exports = {
-  createVoiceConnection,
-  createRadioPlayer,
-};

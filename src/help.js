@@ -1,6 +1,6 @@
 // Function to reveal HELP options
 
-module.exports = function helpCommand() {
+export default function helpCommand() {
   async function handleHelpCommand(interaction) {
     interaction.reply(`
   \`\`\`If you need more help, run into a bug, or have suggestions for additional features, let @littlemiss know!
@@ -15,4 +15,4 @@ module.exports = function helpCommand() {
 `);
   }
   return handleHelpCommand;
-};
+}

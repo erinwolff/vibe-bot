@@ -1,11 +1,11 @@
-const { stopActiveConnection } = require("./radio/queueManager");
-const {
+import { stopActiveConnection } from "./radio/queueManager.js";
+import {
   handleMusicError,
   logDetailedError,
-} = require("./utils/musicErrorHandler");
+} from "./utils/musicErrorHandler.js";
 
 // Function to handle the PLAY command
-module.exports = function playCommand(player) {
+export default function playCommand(player) {
   async function execute(interaction) {
     // Retrieve the query from options
     const query = interaction.options.get("query")?.value;
@@ -101,4 +101,4 @@ module.exports = function playCommand(player) {
     }
   }
   return execute;
-};
+}

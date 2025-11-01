@@ -41,7 +41,7 @@ const radioChoices = [
  * @param {string} stationKey - The key of the radio station
  * @returns {string|null} The stream URL or null if not found
  */
-function getStationUrl(stationKey) {
+export function getStationUrl(stationKey) {
   return radioStations[stationKey] || null;
 }
 
@@ -50,7 +50,7 @@ function getStationUrl(stationKey) {
  * @param {string} stationKey - The key of the radio station
  * @returns {string|null} The station name or null if not found
  */
-function getStationName(stationKey) {
+export function getStationName(stationKey) {
   const station = radioChoices.find((choice) => choice.value === stationKey);
   return station ? station.name : null;
 }
@@ -59,14 +59,8 @@ function getStationName(stationKey) {
  * Get all available radio choices for Discord slash commands
  * @returns {Array} Array of radio station choices
  */
-function getRadioChoices() {
+export function getRadioChoices() {
   return radioChoices;
 }
 
-module.exports = {
-  getStationUrl,
-  getStationName,
-  getRadioChoices,
-  radioStations,
-  radioChoices,
-};
+export { radioStations, radioChoices };

@@ -1,9 +1,11 @@
-const { stopActiveConnection } = require("./radio/queueManager");
-const { logDetailedError } = require("./utils/musicErrorHandler");
-const { sshRun } = require("./utils/remote");
-const config = require("../config.json");
+import { stopActiveConnection } from "./radio/queueManager.js";
+import { logDetailedError } from "./utils/musicErrorHandler.js";
+import { sshRun } from "./utils/remote.js";
+import { readFileSync } from "fs";
 
-module.exports = function stopCommand(player) {
+const config = JSON.parse(readFileSync("./config.json", "utf-8"));
+
+export default function stopCommand(player) {
   async function execute(interaction) {
     await interaction.deferReply();
 
@@ -75,4 +77,4 @@ module.exports = function stopCommand(player) {
   }
 
   return execute;
-};
+}
