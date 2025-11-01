@@ -1,6 +1,8 @@
-const { REST, Routes } = require("discord.js");
-const config = require("../config.json");
-const { getRadioChoices } = require("./radio/stations");
+import { REST, Routes } from "discord.js";
+import { readFileSync } from "fs";
+import { getRadioChoices } from "./radio/stations.js";
+
+const config = JSON.parse(readFileSync("./config.json", "utf-8"));
 
 // Define your slash commands
 const commands = [
@@ -57,7 +59,7 @@ const commands = [
 // Set up REST for deploying commands
 const rest = new REST({ version: "10" }).setToken(config.token);
 
-module.exports = async function registerCommands() {
+export default async function registerCommands() {
   try {
     console.log("Started refreshing application (/) commands.");
 
@@ -76,4 +78,4 @@ module.exports = async function registerCommands() {
     console.error("Error refreshing commands:", error);
   }
   return registerCommands;
-};
+}

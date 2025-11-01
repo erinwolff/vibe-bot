@@ -1,6 +1,6 @@
 // Function to reveal the current QUEUE
 
-module.exports = function queueCommand(player) {
+export default function queueCommand(player) {
   async function handleQueueCommand(interaction) {
 
     // Get the guild id from the interaction

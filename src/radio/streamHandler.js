@@ -2,21 +2,21 @@
  * Radio stream handler module
  * Handles the creation and management of audio streams
  */
-const {
+import {
   joinVoiceChannel,
   createAudioPlayer,
   createAudioResource,
   NoSubscriberBehavior,
   StreamType,
-} = require("@discordjs/voice");
-const { spawn } = require("child_process");
+} from "@discordjs/voice";
+import { spawn } from "child_process";
 
 /**
  * Create a connection to a voice channel
  * @param {Object} channel - The Discord voice channel to join
  * @returns {Object} The voice connection
  */
-function createVoiceConnection(channel) {
+export function createVoiceConnection(channel) {
   return joinVoiceChannel({
     channelId: channel.id,
     guildId: channel.guild.id,
@@ -30,7 +30,7 @@ function createVoiceConnection(channel) {
  * @param {Object} connection - The Discord voice connection
  * @returns {Object} Object with player, start/stop methods, and cleanup functions
  */
-function createRadioPlayer(streamUrl, connection) {
+export function createRadioPlayer(streamUrl, connection) {
   // Create the audio player
   const radioPlayer = createAudioPlayer({
     behaviors: { noSubscriber: NoSubscriberBehavior.Play },
@@ -175,8 +175,3 @@ function createRadioPlayer(streamUrl, connection) {
     destroy: destroyPlayer,
   };
 }
-
-module.exports = {
-  createVoiceConnection,
-  createRadioPlayer,
-};

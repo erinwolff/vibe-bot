@@ -1,9 +1,9 @@
-const {
+import {
   handleMusicError,
   logDetailedError,
-} = require("./utils/musicErrorHandler");
+} from "./utils/musicErrorHandler.js";
 
-module.exports = function skipCommand(player) {
+export default function skipCommand(player) {
   async function execute(interaction) {
     await interaction.deferReply();
 
@@ -67,4 +67,4 @@ module.exports = function skipCommand(player) {
   }
 
   return execute;
-};
+}

@@ -1,6 +1,6 @@
 // Function to handle slash commands incoming from Discord (interaction)
 
-module.exports = function slashCommands(
+export default function slashCommands(
   client,
   execute,
   handleSkipCommand,
@@ -30,4 +30,4 @@ module.exports = function slashCommands(
       handleRadioCommand(interaction);
     }
   });
-};
+}

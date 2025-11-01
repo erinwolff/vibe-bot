@@ -1,21 +1,22 @@
-const { Player } = require("discord-player");
-const { ActivityType } = require("discord.js");
-const { YoutubeiExtractor } = require("discord-player-youtubei");
-const Discord = require("discord.js");
-const errorHandlers = require("./src/error.js");
-const slashCommands = require("./src/slashCommands.js");
-const playCommand = require("./src/play.js");
-const skipCommand = require("./src/skip.js");
-const stopCommand = require("./src/stop.js");
-const queueCommand = require("./src/queue.js");
-const helpCommand = require("./src/help.js");
-const shuffleCommand = require("./src/shuffle.js");
-const radioCommand = require("./src/radio.js");
-const registerCommands = require("./src/register-commands.js");
-const config = require("./config.json");
+import { Player } from "discord-player";
+import { YoutubeSabrExtractor } from "discord-player-googlevideo";
+import { ActivityType, Client } from "discord.js";
+import errorHandlers from "./src/error.js";
+import slashCommands from "./src/slashCommands.js";
+import playCommand from "./src/play.js";
+import skipCommand from "./src/skip.js";
+import stopCommand from "./src/stop.js";
+import queueCommand from "./src/queue.js";
+import helpCommand from "./src/help.js";
+import shuffleCommand from "./src/shuffle.js";
+import radioCommand from "./src/radio.js";
+import registerCommands from "./src/register-commands.js";
+import { readFileSync } from "fs";
+
+const config = JSON.parse(readFileSync("./config.json", "utf-8"));
 
 async function vibeBot() {
-  const client = new Discord.Client({
+  const client = new Client({
     intents: [
       "GuildVoiceStates", // Allows the bot to receive information about voice state updates (such as when a user joins/leaves a channel)
       "Guilds", // Allows the bot to receive information about the guilds (servers) it is in
@@ -25,16 +26,9 @@ async function vibeBot() {
   });
 
   const player = new Player(client);
-  // const youtubeToken = config.youtube_oauthToken;
 
-  // Load all default extractors
-  player.extractors.register(YoutubeiExtractor, {
-    // authentication: youtubeToken,
-    streamOptions: {
-      useClient: "WEB_EMBEDDED",
-    },
-    generateWithPoToken: true,
-  });
+  // Load YouTube extractor using SABR streaming (googlevideo)
+  await player.extractors.register(YoutubeSabrExtractor, {});
 
   // success message once client is logged in
   client.on("ready", async (c) => {
@@ -59,6 +53,13 @@ async function vibeBot() {
   player.events.on("playerStart", (queue, track) => {
     queue.metadata.channel.send(
       `Now playing **${track.title}** ♫⋆｡♪ ₊˚♬ ﾟ. \n${track.url}`
+    );
+  });
+
+  player.events.on("playerError", (queue, error) => {
+    console.error(`Player error in guild ${queue.guild.id}:`, error);
+    queue.metadata.channel.send(
+      `An error occurred while playing the track: ${error.message}`
     );
   });
 

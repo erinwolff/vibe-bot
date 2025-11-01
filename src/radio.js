@@ -1,16 +1,18 @@
-const { getStationUrl, getStationName } = require("./radio/stations");
-const {
+import { getStationUrl, getStationName } from "./radio/stations.js";
+import {
   createVoiceConnection,
   createRadioPlayer,
-} = require("./radio/streamHandler");
-const {
+} from "./radio/streamHandler.js";
+import {
   stopActiveQueue,
   stopActiveConnection,
-} = require("./radio/queueManager");
-const { sshRun } = require("./utils/remote");
-const config = require("../config.json");
+} from "./radio/queueManager.js";
+import { sshRun } from "./utils/remote.js";
+import { readFileSync } from "fs";
 
-module.exports = function radioCommand(discordPlayer) {
+const config = JSON.parse(readFileSync("./config.json", "utf-8"));
+
+export default function radioCommand(discordPlayer) {
   async function handleRadioCommand(interaction) {
     await interaction.deferReply();
 
@@ -84,4 +86,4 @@ module.exports = function radioCommand(discordPlayer) {
   }
 
   return handleRadioCommand;
-};
+}

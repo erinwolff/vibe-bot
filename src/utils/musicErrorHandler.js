@@ -11,7 +11,7 @@
  * @param {Function} cleanupFunction - Function to call for resource cleanup
  * @returns {Promise<void>}
  */
-async function handleMusicError(
+export async function handleMusicError(
   error,
   interaction,
   guildId,
@@ -81,7 +81,7 @@ async function handleMusicError(
  * @param {Error} error - The error that occurred
  * @param {Object} context - Additional context about the error
  */
-function logDetailedError(commandName, error, context = {}) {
+export function logDetailedError(commandName, error, context = {}) {
   const timestamp = new Date().toISOString();
   const contextStr = Object.entries(context)
     .map(([key, value]) => `${key}: ${value}`)
@@ -94,8 +94,3 @@ function logDetailedError(commandName, error, context = {}) {
     console.error(`Stack trace: ${error.stack}`);
   }
 }
-
-module.exports = {
-  handleMusicError,
-  logDetailedError,
-};

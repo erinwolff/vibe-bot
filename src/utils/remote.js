@@ -1,6 +1,6 @@
-const { exec } = require("child_process");
+import { exec } from "child_process";
 
-function sshRun(host, user, cmd) {
+export function sshRun(host, user, cmd) {
   return new Promise((resolve, reject) => {
     exec(
       `ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new ${user}@${host} '${cmd.replace(
@@ -14,5 +14,3 @@ function sshRun(host, user, cmd) {
     );
   });
 }
-
-module.exports = { sshRun };
