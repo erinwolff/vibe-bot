@@ -5,7 +5,7 @@
     "@discordjs/voice": "latest",
     "bgutils-js": "^3.2.0",
     "discord-player": "latest",
-    "discord-player-googlevideo": "^0.1.2",
+    "discord-player-googlevideo": "^0.2.2",
     "discord-player-youtubei": "latest",
     "discord.js": "latest",
     "ffmpeg-static": "latest",
