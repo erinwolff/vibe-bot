@@ -10,6 +10,7 @@ import queueCommand from "./src/queue.js";
 import helpCommand from "./src/help.js";
 import shuffleCommand from "./src/shuffle.js";
 import radioCommand from "./src/radio.js";
+import nowPlayingCommand from "./src/nowplaying.js";
 import registerCommands from "./src/register-commands.js";
 import { readFileSync } from "fs";
 
@@ -90,6 +91,7 @@ async function vibeBot() {
     helpCommand(),
     shuffleCommand(player),
     radioCommand(player),
+    nowPlayingCommand(),
   );
 
   // Function to handle the PLAY command

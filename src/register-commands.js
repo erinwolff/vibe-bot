@@ -53,6 +53,11 @@ const commands = [
     ],
   },
 
+  {
+    name: "nowplaying",
+    description: "Show what is currently playing on the local radio stations.",
+  },
+
   // Add other commands as needed
 ];
 

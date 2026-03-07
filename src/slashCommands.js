@@ -8,7 +8,8 @@ export default function slashCommands(
   handleQueueCommand,
   handleHelpCommand,
   handleShuffleCommand,
-  handleRadioCommand
+  handleRadioCommand,
+  handleNowPlayingCommand
 ) {
   client.on("interactionCreate", async (interaction) => {
     if (!interaction.isCommand()) return;
@@ -28,6 +29,8 @@ export default function slashCommands(
       handleShuffleCommand(interaction);
     } else if (commandName === "radio") {
       handleRadioCommand(interaction);
+    } else if (commandName === "nowplaying") {
+      handleNowPlayingCommand(interaction);
     }
   });
 }
