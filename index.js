@@ -52,14 +52,14 @@ async function vibeBot() {
 
   player.events.on("playerStart", (queue, track) => {
     queue.metadata.channel.send(
-      `Now playing **${track.title}** ♫⋆｡♪ ₊˚♬ ﾟ. \n${track.url}`
+      `Now playing **${track.title}** ♫⋆｡♪ ₊˚♬ ﾟ. \n${track.url}`,
     );
   });
 
   player.events.on("playerError", (queue, error) => {
     console.error(`Player error in guild ${queue.guild.id}:`, error);
     queue.metadata.channel.send(
-      `An error occurred while playing the track: ${error.message}`
+      `An error occurred while playing the track: ${error.message}`,
     );
   });
 
@@ -89,7 +89,7 @@ async function vibeBot() {
     queueCommand(player),
     helpCommand(),
     shuffleCommand(player),
-    radioCommand(player)
+    radioCommand(player),
   );
 
   // Function to handle the PLAY command
@@ -119,7 +119,7 @@ async function vibeBot() {
     if (commandName === "shuffle") {
       await interaction.deferReply();
       const loadingMessage = await interaction.followUp(
-        "Shuffling the queue..."
+        "Shuffling the queue...",
       );
 
       // Call the shuffle function here
