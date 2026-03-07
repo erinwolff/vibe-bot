@@ -3,10 +3,7 @@ import {
   createVoiceConnection,
   createRadioPlayer,
 } from "./radio/streamHandler.js";
-import {
-  stopActiveQueue,
-  stopActiveConnection,
-} from "./radio/queueManager.js";
+import { stopActiveQueue, stopActiveConnection } from "./radio/queueManager.js";
 import { sshRun } from "./utils/remote.js";
 import { readFileSync } from "fs";
 
@@ -22,7 +19,7 @@ export default function radioCommand(discordPlayer) {
       const channel = member.voice.channel;
       if (!member || !channel) {
         return interaction.editReply(
-          "You are not connected to a voice channel!"
+          "You are not connected to a voice channel!",
         );
       }
 
@@ -38,23 +35,26 @@ export default function radioCommand(discordPlayer) {
       await stopActiveQueue(discordPlayer, guildId);
       stopActiveConnection(guildId);
 
-      // 3.5 Spin up Selections FM on the PC (only for our local mount)
-      if (stationKey === "selections") {
+      // 3.5 Spin up local station on the PC (only for our local mount)
+      const localStations = {
+        selections: {
+          service: "selections-radio.service",
+          mount: "selections.mp3",
+        },
+        trove: { service: "littlemiss-trove.service", mount: "trove.mp3" },
+      };
+
+      if (stationKey in localStations) {
         const { pc_host, pc_user } = config;
-        // start user service on PC (idempotent)
-        await sshRun(
-          pc_host,
-          pc_user,
-          "systemctl --user start selections-radio.service"
-        );
-        // give ffmpeg a moment to attach to Icecast
+        const { service, mount } = localStations[stationKey];
+        await sshRun(pc_host, pc_user, `systemctl --user start ${service}`);
         await new Promise((r) => setTimeout(r, 1500));
-        streamUrl = `http://${pc_host}:8000/selections.mp3`;
+        streamUrl = `http://${pc_host}:8000/${mount}`;
       }
 
       if (!streamUrl) {
         return interaction.editReply(
-          "Invalid radio station selected. Please choose a valid option."
+          "Invalid radio station selected. Please choose a valid option.",
         );
       }
 
@@ -66,9 +66,14 @@ export default function radioCommand(discordPlayer) {
       radioStream.start();
 
       // 6. Send success message
-      const label = stationKey === "selections" ? "Selections FM" : stationName;
+      const label =
+        stationKey === "selections"
+          ? "Selections FM"
+          : stationKey === "trove"
+            ? "Littlemiss Treasure Trove"
+            : stationName;
       return interaction.editReply(
-        `**Now streaming ${label}!** Enjoy the tunes ⋆♫˚.⋆⭒.˚⋆`
+        `**Now streaming ${label}!** Enjoy the tunes ⋆♫˚.⋆⭒.˚⋆`,
       );
     } catch (error) {
       console.error("Error in radio command:", error);
