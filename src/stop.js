@@ -13,7 +13,7 @@ export default function stopCommand(player) {
     const guildId = interaction.guild?.id;
     if (!guildId) {
       return interaction.editReply(
-        "This command can only be used in a server."
+        "This command can only be used in a server.",
       );
     }
 
@@ -39,19 +39,21 @@ export default function stopCommand(player) {
       const connectionStopped = stopActiveConnection(guildId);
       stoppedSomething = stoppedSomething || connectionStopped;
 
-      // Always try to stop the Icecast stream on PC
-      try {
-        await sshRun(
-          config.pc_host,
-          config.pc_user,
-          "systemctl --user stop selections-radio.service"
-        );
-        console.log("Stopped selections-radio.service on PC");
-      } catch (sshError) {
-        console.warn(
-          "Could not stop selections-radio.service:",
-          sshError.message
-        );
+      // Always try to stop the Icecast streams on PC
+      for (const service of [
+        "selections-radio.service",
+        "littlemiss-trove.service",
+      ]) {
+        try {
+          await sshRun(
+            config.pc_host,
+            config.pc_user,
+            `systemctl --user stop ${service}`,
+          );
+          console.log(`Stopped ${service} on PC`);
+        } catch (sshError) {
+          console.warn(`Could not stop ${service}:`, sshError.message);
+        }
       }
 
       if (stoppedSomething) {
@@ -68,7 +70,7 @@ export default function stopCommand(player) {
         stopActiveConnection(guildId);
 
         return interaction.editReply(
-          "⚠️ Encountered an issue, but attempted to stop playing and disconnect."
+          "⚠️ Encountered an issue, but attempted to stop playing and disconnect.",
         );
       } catch (replyError) {
         console.error("Failed to send error reply:", replyError);
