@@ -3,16 +3,14 @@
   "dependencies": {
     "@discord-player/extractor": "latest",
     "@discordjs/voice": "latest",
-    "@snazzah/davey": "^0.1.10",
-    "bgutils-js": "^3.2.0",
+    "@snazzah/davey": "latest",
+    "bgutils-js": "latest",
     "discord-player": "latest",
-    "discord-player-googlevideo": "^0.2.3",
-    "discord-player-youtubei": "latest",
     "discord.js": "latest",
     "ffmpeg-static": "latest",
     "opusscript": "latest"
   },
   "engines": {
-    "node": "20.19.0"
+    "node": ">=22.12.0"
   }
 }

@@ -1,5 +1,5 @@
 import { Player } from "discord-player";
-import { YoutubeSabrExtractor } from "discord-player-googlevideo";
+import { YtDlpExtractor } from "./src/extractors/YtDlpExtractor.js";
 import { ActivityType, Client } from "discord.js";
 import errorHandlers from "./src/error.js";
 import slashCommands from "./src/slashCommands.js";
@@ -28,8 +28,8 @@ async function vibeBot() {
 
   const player = new Player(client);
 
-  // Load YouTube extractor using SABR streaming (googlevideo)
-  await player.extractors.register(YoutubeSabrExtractor, {});
+  // Load YouTube extractor using yt-dlp
+  await player.extractors.register(YtDlpExtractor, {});
 
   // success message once client is logged in
   client.on("ready", async (c) => {
