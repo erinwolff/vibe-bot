@@ -8,7 +8,8 @@
     "discord-player": "latest",
     "discord.js": "latest",
     "ffmpeg-static": "latest",
-    "opusscript": "latest"
+    "opusscript": "latest",
+    "undici": "latest"
   },
   "engines": {
     "node": ">=22.12.0"

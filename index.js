@@ -32,7 +32,7 @@ async function vibeBot() {
   await player.extractors.register(YtDlpExtractor, {});
 
   // success message once client is logged in
-  client.on("ready", async (c) => {
+  client.on("clientReady", async () => {
     console.log(`Logged in as ${client.user.tag}!`);
     console.log("vibe-bot is online and ready to rock!");
 
@@ -42,7 +42,7 @@ async function vibeBot() {
     // Set custom message and presence status
     try {
       client.user.setPresence({
-        activities: [{ name: `some tunes`, type: ActivityType.Listening }], // Activity types: Competing, Custom, Listening, Playing, Streaming, Watching
+        activities: [{ name: `we vibing`, type: ActivityType.Playing }],
         status: "online",
       });
       console.log("Activity set successfully");
