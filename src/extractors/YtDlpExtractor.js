@@ -52,8 +52,8 @@ export class YtDlpExtractor extends BaseExtractor {
       // ytsearch may return multiple lines; take the first result
       raw = JSON.parse(json.split("\n")[0]);
     } catch (err) {
-      this.context.player.debug(`[YtDlpExtractor] handle error: ${err.message}`);
-      return { playlist: null, tracks: [] };
+      console.error(`[YtDlpExtractor] handle failed for "${ytQuery}": ${err.message}`);
+      throw err;
     }
 
     const durationMs = (raw.duration ?? 0) * 1000;
