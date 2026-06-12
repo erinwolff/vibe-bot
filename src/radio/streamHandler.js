@@ -79,8 +79,6 @@ export function createRadioPlayer(streamUrl, connection) {
       "1",
       "-reconnect_delay_max",
       "5",
-      "-fflags",
-      "+nobuffer",
       "-i",
       streamUrl,
       "-vn",
@@ -97,12 +95,7 @@ export function createRadioPlayer(streamUrl, connection) {
 
     const resource = createAudioResource(ffmpeg.stdout, {
       inputType: StreamType.Raw,
-      inlineVolume: true,
     });
-
-    if (resource.volume) {
-      resource.volume.setVolume(0.2);
-    }
 
     radioPlayer.play(resource);
     connection.subscribe(radioPlayer);

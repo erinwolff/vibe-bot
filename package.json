@@ -2,6 +2,7 @@
   "type": "module",
   "dependencies": {
     "@discord-player/extractor": "latest",
+    "@discordjs/opus": "latest",
     "@discordjs/voice": "latest",
     "@snazzah/davey": "latest",
     "bgutils-js": "latest",
@@ -9,6 +10,7 @@
     "discord.js": "latest",
     "ffmpeg-static": "latest",
     "opusscript": "latest",
+    "sodium-native": "latest",
     "undici": "latest"
   },
   "engines": {
