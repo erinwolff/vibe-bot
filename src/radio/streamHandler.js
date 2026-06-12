@@ -83,7 +83,7 @@ export function createRadioPlayer(streamUrl, connection) {
       streamUrl,
       "-vn",
       "-af",
-      "volume=0.2",
+      "volume=0.04",
       "-f",
       "s16le",
       "-ar",
