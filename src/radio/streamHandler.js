@@ -84,17 +84,21 @@ export function createRadioPlayer(streamUrl, connection) {
       "-vn",
       "-af",
       "volume=0.04",
-      "-f",
-      "s16le",
+      "-c:a",
+      "libopus",
+      "-b:a",
+      "128k",
       "-ar",
       "48000",
       "-ac",
       "2",
+      "-f",
+      "ogg",
       "pipe:1",
     ]);
 
     const resource = createAudioResource(ffmpeg.stdout, {
-      inputType: StreamType.Raw,
+      inputType: StreamType.OggOpus,
     });
 
     radioPlayer.play(resource);
