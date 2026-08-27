@@ -92,20 +92,54 @@ export class YtDlpExtractor extends BaseExtractor {
       "bestaudio[ext=webm]/bestaudio/best",
       "--no-playlist",
       "--no-warnings",
+      "--no-progress",
       "-o",
       "-",
       url,
     ]);
 
+    let stderr = "";
     proc.stderr.on("data", (d) => {
       const msg = d.toString();
+      stderr += msg;
       if (msg.includes("ERROR")) {
         console.error(`[YtDlpExtractor] ${msg.trim()}`);
       }
     });
 
-    proc.on("error", (err) => {
-      console.error(`[YtDlpExtractor] spawn error: ${err.message}`);
+    // Wait for the first audio bytes before handing the stream over. When yt-dlp
+    // fails (403, geo-block, removed video) it exits without ever writing to
+    // stdout, and an empty stream looks to discord-player like a track that
+    // played for zero seconds -- silent playback with no error anywhere.
+    await new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        proc.kill();
+        reject(new Error("yt-dlp produced no audio within 30s"));
+      }, 30_000);
+
+      const done = (fn) => (arg) => {
+        clearTimeout(timer);
+        proc.stdout.off("readable", onReadable);
+        proc.off("close", onClose);
+        proc.off("error", onError);
+        fn(arg);
+      };
+      const onReadable = done(resolve);
+      const onClose = done((code) =>
+        reject(
+          new Error(
+            stderr.trim() || `yt-dlp exited with code ${code} before sending audio`,
+          ),
+        ),
+      );
+      const onError = done((err) => {
+        proc.kill();
+        reject(err);
+      });
+
+      proc.stdout.once("readable", onReadable);
+      proc.once("close", onClose);
+      proc.once("error", onError);
     });
 
     return proc.stdout;
