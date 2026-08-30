@@ -58,7 +58,7 @@ export default function playCommand(player) {
             leaveOnEmpty: true,
             leaveOnStop: true,
             leaveOnStopCooldown: 600000,
-            volume: 6,
+            volume: 10,
           },
         });
 
